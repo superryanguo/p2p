@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"time"
 	//TODO: use the zap logger
@@ -29,9 +30,16 @@ func main() {
 	}
 
 	fmt.Printf("p2p node serving@%s\n", node.Addr())
+	ad := "192.168.1.107:38749"
+	if _, err := node.Ping(context.TODO(), ad); err != nil {
+		panic(err)
+	}
+
 	for {
 		time.Sleep(5 * time.Second)
-		fmt.Printf("Node discovered %d peer(s).\n", len(kn.Discover()))
+		if len(kn.Discover()) != 0 {
+			fmt.Printf("Node discovered %d peer(s).\n", len(kn.Discover()))
+		}
 	}
 
 }
