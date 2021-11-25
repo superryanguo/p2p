@@ -33,7 +33,7 @@ func init() {
 		logFile = "./peer2peer.log"
 		file := zapcore.Lock(getLogWriter())
 		console := zapcore.Lock(os.Stdout)
-		level = zap.NewAtomicLevelAt(zap.InfoLevel)
+		level = zap.NewAtomicLevelAt(zap.DebugLevel)
 		cfg := zap.NewDevelopmentEncoderConfig()
 		cfg.EncodeTime = zapcore.ISO8601TimeEncoder
 		encoder := zapcore.NewConsoleEncoder(cfg)

@@ -14,7 +14,7 @@ import (
 func main() {
 	addrP := flag.String("addr", "", "peer TCP address")
 	flag.Parse()
-	log.Debugf("The ping addr =%s\n", *addrP)
+	log.Debugf("The ping addr ={%s}\n", *addrP)
 	node, err := noise.NewNode()
 	if err != nil {
 		log.Fatal(err.Error())
