@@ -2,23 +2,27 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"flag"
 	"time"
-	//TODO: use the zap logger
+
+	"github.com/superryanguo/p2p/log"
+
 	"github.com/perlin-network/noise"
 	"github.com/perlin-network/noise/kademlia"
 )
 
 func main() {
-	//TODO: add a flag to pass the client here
+	addrP := flag.String("addr", "", "peer TCP address")
+	flag.Parse()
+	log.Debugf("The ping addr =%s\n", *addrP)
 	node, err := noise.NewNode()
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 	defer node.Close()
 
 	node.Handle(func(ctx noise.HandlerContext) error {
-		fmt.Printf("Got a message from others: '%s'\n", string(ctx.Data()))
+		log.Debugf("Got a message from others: '%s'\n", string(ctx.Data()))
 		return nil
 	})
 	kn := kademlia.New()
@@ -26,19 +30,25 @@ func main() {
 	node.Bind(kn.Protocol())
 
 	if err := node.Listen(); err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
 
-	fmt.Printf("p2p node serving@%s\n", node.Addr())
-	ad := "192.168.1.107:38749"
-	if _, err := node.Ping(context.TODO(), ad); err != nil {
-		panic(err)
+	go log.LogServer(":8097")
+	defer log.Sync()
+
+	log.Infof("p2p node serving@%s\n", node.Addr())
+	//ad := "localhost:43633" ad := "127.0.0.1:43633"
+
+	if *addrP != "" {
+		if _, err := node.Ping(context.TODO(), *addrP); err != nil {
+			log.Fatal(err.Error())
+		}
 	}
 
 	for {
 		time.Sleep(5 * time.Second)
 		if len(kn.Discover()) != 0 {
-			fmt.Printf("Node discovered %d peer(s).\n", len(kn.Discover()))
+			log.Infof("Node discovered %d peer(s).\n", len(kn.Discover()))
 		}
 	}
 
