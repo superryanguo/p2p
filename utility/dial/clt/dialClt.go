@@ -11,7 +11,7 @@ import (
 func main() {
 	addrP := flag.String("addr", "", "peer TCP address")
 	flag.Parse()
-	log.Infof("The ping addr =%s\n", *addrP)
+	log.Printf("The ping addr =%s\n", *addrP)
 	var d net.Dialer
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
