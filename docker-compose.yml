@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+  p2p_1:
+    image: p2p
+    container_name: "p2p"
+    networks:
+      - node-net
+
+networks:
+  node-net:
+    name: node-net

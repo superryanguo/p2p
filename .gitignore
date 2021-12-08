@@ -7,6 +7,7 @@
 *.swp
 *.swo
 peer2peer.log
+trace.out
 
 # Test binary, built with `go test -c`
 *.test
